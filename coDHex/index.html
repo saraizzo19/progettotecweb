@@ -1,10 +1,533 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>coDHex - Landing Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- RESET E VARIABILI --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-color: #B56952; /* Terracotta principale */
+            --secondary-color: #DDBEB9; /* Rosato chiaro per accenti */
+            --bg-light: #FDFBF4; /* Sfondo pagina crema chiaro */
+            --bg-medium: #EBE7DE; /* Sfondo sezioni beige */
+            --text-dark: #333;
+            --text-light: #555;
+            --text-white: #FFFFFF;
+            --shadow-light: rgba(0,0,0,0.05);
+            --shadow-medium: rgba(181, 105, 82, 0.2);
+            --border-radius-lg: 20px;
+            --border-radius-md: 12px;
+            --padding-section: 80px 0;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-light) 0%, #EFEAD8 100%);
+            color: var(--text-dark);
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3, h4 {
+            color: var(--text-dark);
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        h1 { font-size: 3.5em; line-height: 1.1; }
+        h2 { font-size: 2.5em; }
+        h3 { font-size: 1.8em; }
+        p { margin-bottom: 15px; color: var(--text-light); }
+
+        .text-center { text-align: center; }
+
+        /* --- BUTTONS --- */
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: var(--border-radius-md);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px var(--shadow-medium);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--text-white);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #a35d48; /* Tonalità più scura */
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px var(--shadow-medium);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            box-shadow: none;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--primary-color);
+            color: var(--text-white);
+            transform: translateY(-2px);
+        }
+
+
+        /* --- LOGIN BUTTON NAVBAR --- */
+        .btn-nav-login {
+            background-color: var(--primary-color);
+            color: var(--text-white) !important; /* !important per sovrascrivere il colore dei link standard */
+            padding: 10px 25px;
+            border-radius: 50px; /* Molto arrotondato */
+            margin-left: 25px;
+            box-shadow: 0 4px 15px var(--shadow-medium);
+            transition: all 0.3s ease;
+        }
+
+        .btn-nav-login:hover {
+            background-color: #a35d48;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow-medium);
+            text-decoration: none;
+        }
+
+        /* Adattamento per Mobile */
+        @media (max-width: 768px) {
+            .btn-nav-login {
+                margin-left: 0;
+                margin-top: 15px;
+                display: inline-block;
+                width: 80%; /* Più largo su mobile */
+                text-align: center;
+            }
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            background-color: var(--bg-medium);
+            padding: 20px 0;
+            box-shadow: 0 2px 10px var(--shadow-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom-left-radius: var(--border-radius-lg);
+            border-bottom-right-radius: var(--border-radius-lg);
+            border: 1px solid rgba(0,0,0,0.03);
+            margin-bottom: 30px;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            font-size: 1.8em;
+            font-weight: 800;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .navbar-nav a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 30px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Hamburger menu (mobile) */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+        .menu-toggle span {
+            height: 3px;
+            width: 25px;
+            background: var(--text-dark);
+            margin-bottom: 4px;
+            border-radius: 5px;
+        }
+        @media (max-width: 768px) {
+            .navbar-nav {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 80px; /* Adjust based on navbar height */
+                left: 0;
+                width: 100%;
+                background-color: var(--bg-medium);
+                box-shadow: 0 8px 15px var(--shadow-light);
+                border-bottom-left-radius: var(--border-radius-lg);
+                border-bottom-right-radius: var(--border-radius-lg);
+                padding: 20px 0;
+            }
+            .navbar-nav.active {
+                display: flex;
+            }
+            .navbar-nav a {
+                margin: 10px 0;
+                text-align: center;
+            }
+            .menu-toggle {
+                display: flex;
+            }
+        }
+
+
+        /* --- HERO SECTION --- */
+        .hero {
+            padding: var(--padding-section);
+            text-align: center;
+            background-color: transparent;
+            margin-bottom: 50px;
+        }
+
+        .hero h1 {
+            color: var(--primary-color);
+            font-size: 4.5em;
+            margin-bottom: 25px;
+            letter-spacing: -1px;
+        }
+        .hero h1 span {
+            color: var(--text-dark);
+        }
+
+        .hero p {
+            font-size: 1.3em;
+            max-width: 800px;
+            margin: 0 auto 40px auto;
+            color: var(--text-dark);
+            font-weight: 400;
+        }
+        .hero .btn {
+            margin: 0 10px;
+        }
+
+        /* --- ABOUT/GENERAL SECTION --- */
+        .section {
+            padding: var(--padding-section);
+            background-color: var(--bg-medium);
+            border-radius: var(--border-radius-lg);
+            margin-bottom: 50px;
+            box-shadow: 0 10px 25px var(--shadow-light);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .section-light {
+            background-color: var(--bg-light); /* Per variare lo sfondo tra le sezioni */
+            box-shadow: none;
+            border: none;
+        }
+
+        .section h2 {
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+        }
+        .section h2::after { /* Sottolineatura custom */
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 60px;
+            height: 4px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        .grid-2-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        .grid-2-cols img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--border-radius-lg);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .grid-item-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* --- SERVICES / FEATURES SECTION --- */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background-color: var(--bg-light);
+            padding: 30px;
+            border-radius: var(--border-radius-lg);
+            box-shadow: 0 8px 20px var(--shadow-light);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px var(--shadow-medium);
+        }
+
+        .card .icon {
+            font-size: 3em;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        .card p {
+            font-size: 0.95em;
+            color: var(--text-light);
+        }
+
+        /* --- CTA SECTION --- */
+        .cta-section {
+            background-color: var(--primary-color);
+            color: var(--text-white);
+            padding: var(--padding-section);
+            text-align: center;
+            border-radius: var(--border-radius-lg);
+            margin-bottom: 50px;
+            box-shadow: 0 15px 30px var(--shadow-medium);
+        }
+        .cta-section h2 {
+            color: var(--text-white);
+            margin-bottom: 30px;
+            font-size: 2.8em;
+        }
+        .cta-section h2::after {
+            background-color: var(--text-white);
+        }
+        .cta-section p {
+            font-size: 1.2em;
+            max-width: 800px;
+            margin: 0 auto 40px auto;
+            color: rgba(255,255,255,0.9);
+        }
+        .cta-section .btn {
+            background-color: var(--bg-light);
+            color: var(--primary-color);
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .cta-section .btn:hover {
+            background-color: var(--text-white);
+            color: #a35d48;
+        }
+
+        /* --- FOOTER --- */
+        .footer {
+            background-color: var(--bg-medium);
+            color: var(--text-light);
+            padding: 40px 0;
+            text-align: center;
+            border-top-left-radius: var(--border-radius-lg);
+            border-top-right-radius: var(--border-radius-lg);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .footer p {
+            margin-bottom: 10px;
+        }
+        .footer .social-icons a {
+            color: var(--primary-color);
+            font-size: 1.5em;
+            margin: 0 10px;
+            transition: transform 0.3s ease;
+        }
+        .footer .social-icons a:hover {
+            transform: translateY(-3px);
+            color: var(--text-dark);
+        }
+
+        /* --- RESPONSIVE ADJUSTMENTS --- */
+        @media (max-width: 992px) {
+            .hero h1 { font-size: 3em; }
+            .hero p { font-size: 1.1em; }
+            h2 { font-size: 2em; }
+            .grid-2-cols { grid-template-columns: 1fr; }
+            .grid-item-img { order: -1; margin-bottom: 30px; } /* Immagine sopra il testo su mobile */
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5em; }
+            h2 { font-size: 1.8em; }
+            .hero .btn { margin: 10px 0; display: block; }
+            .section { padding: 60px 0; }
+            .cta-section h2 { font-size: 2em; }
+            .cta-section p { font-size: 1em; }
+            .navbar-nav a { margin-left: 0; }
+        }
+
+        @media (max-width: 576px) {
+            h1 { font-size: 2em; }
+            h2 { font-size: 1.5em; }
+            .section { padding: 40px 0; }
+            .card { padding: 25px; }
+        }
+    </style>
 </head>
 <body>
 
+<nav class="navbar">
+    <div class="container">
+        <a href="#" class="navbar-brand">coDHex</a>
+        <div class="menu-toggle" id="mobile-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="navbar-nav" id="main-nav">
+            <a href="#home">Home</a>
+            <a href="#about">Chi Siamo</a>
+            <a href="#services">Servizi</a>
+            <a href="#contact">Contatti</a>
+
+            <a href="login.html" class="btn-nav-login">
+                <i class="fas fa-user-circle" style="margin-right: 8px;"></i>Accedi
+            </a>
+        </div>
+    </div>
+</nav>
+
+<section class="hero" id="home">
+    <div class="container">
+        <h1>Digitalizza le tue <span>citazioni bibliografiche</span> con coDHex</h1>
+        <p>Siamo la tua guida alla soluzione del problema della bibliografia e delle citazioni nella scrittura di papers/articoli/tesi universitarie. Scopri come possiamo aiutarti.</p>
+        <div>
+            <a href="#services" class="btn btn-primary">Scopri i Servizi</a>
+            <a href="#contact" class="btn btn-secondary">Parla con Noi</a>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="about">
+    <div class="container">
+        <h2 class="text-center">Chi Siamo</h2>
+        <div class="grid-2-cols">
+            <div class="grid-item-text">
+                <h3>La Nostra Missione</h3>
+                <p>Con coDHex, crediamo che possiamo essere di aiuto per la creazione secondo lo standard scelto e la lungo termine delle citazioni bibliografiche.</p>
+            </div>
+            <div class="grid-item-img">
+                <img src="https://picsum.photos/600/400?random=1&grayscale" alt="Team al lavoro">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section section-light" id="services">
+    <div class="container">
+        <h2 class="text-center">I Nostri Servizi</h2>
+        <div class="cards-grid">
+            <div class="card">
+                <div class="icon"><i class="fas fa-desktop"></i></div>
+                <h3>Digitalizzazione delle fonti</h3>
+                <p>Le tue fonti vengono digitalizzate e categorizzate in base al genere della fonte indicata.</p>
+            </div>
+            <div class="card">
+                <div class="icon"><i class="fas fa-mobile-alt"></i></div>
+                <h3>Conservazione delle fonti</h3>
+                <p>Le tue fonti vengono conservate all'interno del tuo profilo in una sezione apposita per permettere la continua consultazione.</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="section" id="features">
+    <div class="container">
+        <h2 class="text-center">Perché Scegliere coDHex</h2>
+        <div class="cards-grid">
+            <div class="card">
+                <div class="icon"><i class="fas fa-lightbulb"></i></div>
+                <h3>Da studenti per studenti</h3>
+                <p>Il nostro progetto si basa su una problematica reale affrontata dal nostro team in prima persona.</p>
+            </div>
+            <div class="card">
+                <div class="icon"><i class="fas fa-handshake"></i></div>
+                <h3>Approccio universitario</h3>
+                <p>Offriamo diversi formati di citazione per permettere il più semplice e veloce sistema di bibliografia</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section" id="contact">
+    <div class="container">
+        <h2>Pronto/a digitalizzare la bibliografia?</h2>
+        <p>Contattaci oggi stesso per risolvere qualsiasi dubbio sul funzionamento del servizio.</p>
+        <p>g.crimani@studenti.unior.it / s.izzo8@studenti.unior.it</p>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="container">
+        <p>&copy; 2025 coDHex.</p>
+    </div>
+</footer>
+
+<script>
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+
+            // Close mobile menu if open
+            if (document.getElementById('main-nav').classList.contains('active')) {
+                document.getElementById('main-nav').classList.remove('active');
+                document.getElementById('mobile-menu').classList.remove('active');
+            }
+        });
+    });
+
+    // Mobile menu toggle
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mainNav = document.getElementById('main-nav');
+
+    mobileMenu.addEventListener('click', () => {
+        mobileMenu.classList.toggle('active');
+        mainNav.classList.toggle('active');
+    });
+</script>
 </body>
 </html>

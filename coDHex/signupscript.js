@@ -96,7 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const type = inputField.getAttribute('type') === 'password' ? 'text' : 'password';
             inputField.setAttribute('type', type);
 
-            // Cambia l'icona
             if (type === 'text') {
                 eyeIcon.classList.add('show-password');
             } else {

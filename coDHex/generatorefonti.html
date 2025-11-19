@@ -3,8 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <title>Generatore delle fonti</title>
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+
+        :root {
+            --primary-color: #B56952; /* Terracotta principale */
+            --secondary-color: #DDBEB9; /* Rosato chiaro per accenti */
+            --bg-light: #FDFBF4; /* Sfondo pagina crema chiaro */
+            --bg-medium: #EBE7DE; /* Sfondo sezioni beige */
+            --text-dark: #333;
+            --text-light: #555;
+            --text-white: #FFFFFF;
+            --shadow-light: rgba(0,0,0,0.05);
+            --shadow-medium: rgba(181, 105, 82, 0.2);
+            --border-radius-lg: 20px;
+            --border-radius-md: 12px;
+            --padding-section: 80px 0;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-light) 0%, #EFEAD8 100%);
+            color: var(--text-dark);
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3, h4 {
+            color: var(--text-dark);
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        h1 { font-size: 3.5em; line-height: 1.1; }
+        h2 { font-size: 2.5em; }
+        h3 { font-size: 1.8em; }
+        p { margin-bottom: 15px; color: var(--text-light); }
+
+        .text-center { text-align: center; }
+
+
+
+
+
+    </style>
 </head>
 <body>
+
+<div class="">
+    <div class="">
+        <div class="">
+            <h2>Aggiungere una fonte</h2>
+            <p>Utilizza il form per aggiungere una fonte</p>
+        </div>
+
+        <form class="" id="" novalidate>
+            <div class="">
+                <div class="input-wrapper">
+                    <input type="text" id="authorfname" name="authorfname">
+                    <label for="authorfname">Nome dell'autore</label>
+                    <span class="focus-border"></span>
+                </div>
+            </div>
+
+            <div class="">
+                <div class="">
+                    <input type="text" id="authorlname" name="authorlname">
+                    <label for="authorlname">Cognome</label>
+                    <span class="focus-border"></span>
+                </div>
+            </div>
+
+            <div class="">
+                <div class="">
+                    <input type="text" id="title" name="title">
+                    <label for="title">Titolo</label>
+                    <span class="focus-border"></span>
+                </div>
+            </div>
+
+            <div class="">
+                <div class="">
+                    <input type="text" id="city" name="city">
+                    <label for="city">Città di stampa</label>
+                    <span class="focus-border"></span>
+                </div>
+            </div>
+
+            <div class="">
+                <div class="">
+                    <input type="text" id="city" name="city">
+                    <label for="city">Città di stampa</label>
+                    <span class="focus-border"></span>
+                </div>
+            </div>
+
+            <div class="">
+                <div class="">
+                    <input type="text" id="publisher" name="publisher">
+                    <label for="publisher"> Editore</label>
+                    <span class="focus-border"></span>
+                </div>
+            </div>
+
+            <div class="">
+                <div class="">
+                    <input type="date" id="publishdate" name="publishdate">
+                    <label for="publishdate">Data di pubblicazione</label>
+                    <span class="focus-border"></span>
+                </div>
+            </div>
+
+            <div class="">
+                <div class="">
+                    <input type="number" id="pages" name="pages">
+                    <label for="pages">Numero pagine</label>
+                    <span class="focus-border"></span>
+                </div>
+            </div>
+
+            <div class="">
+                <div class="">
+                    <input type="number" id="edition" name="edition">
+                    <label for="edition">Edizione</label>
+                    <span class="focus-border"></span>
+                </div>
+            </div>
+
+            <div class="">
+                <div class="">
+                    <input type="number" id="isbn" name="isbn">
+                    <label for="isbn">ISBN</label>
+                    <span class="focus-border"></span>
+                </div>
+            </div>
+
+
+
+            <button type="submit" class="">
+                <span class="btn-text">Inserisci fonte</span>
+                <span class="btn-loader"></span>
+            </button>
+        </form>
+
+
 
 </body>
 </html>

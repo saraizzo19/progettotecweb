@@ -1,12 +1,11 @@
 <?php
-// Colleghiamo il database
+// 1. Includiamo la connessione al database
 require 'db_connect.php';
 
-// Verifichiamo che la pagina sia stata chiamata dal pulsante di invio
+// 2. Controlliamo se il form è stato inviato
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // --- 1. RECUPERO DATI DAL FORM ---
-    // $_POST['...'] deve contenere il "name" che hai messo nell'HTML
+    // --- RECUPERO DATI (Mapping HTML -> PHP) ---
     $nome = $_POST['name'] ?? '';
     $cognome = $_POST['surname'] ?? '';
     $data_nascita = $_POST['date'] ?? '';
@@ -14,32 +13,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'] ?? '';
     $conferma_pwd = $_POST['confirmPassword'] ?? '';
 
-    // --- 2. CONTROLLI DI SICUREZZA ---
+    // --- VALIDAZIONE ---
 
-    // Controlliamo se i campi essenziali sono vuoti
-    if (empty($nome) || empty($cognome) || empty($email) || empty($password)) {
-        die("Errore: Compila tutti i campi obbligatori.");
+    // Controllo campi vuoti (sicurezza extra oltre al 'required' HTML)
+    if (empty($nome) || empty($cognome) || empty($data_nascita) || empty($email) || empty($password)) {
+        die("Errore: Tutti i campi sono obbligatori.");
     }
 
-    // Controlliamo se le password coincidono
+    // Controllo password uguali
     if ($password !== $conferma_pwd) {
-        die("Errore: Le due password inserite non sono uguali.");
+        die("Errore: Le password non coincidono. <a href='javascript:history.back()'>Torna indietro</a>");
     }
 
-    // --- 3. SALVATAGGIO NEL DATABASE ---
+    // --- SALVATAGGIO NEL DB ---
 
-    // Criptiamo la password per sicurezza
+    // Criptiamo la password
     $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
-    // Prepariamo la query SQL
-    // IMPORTANTE: I nomi dentro "INSERT INTO utenti (...)" devono essere le colonne del DB
+    // Prepariamo la query.
+    // NOTA BENE:
+    // A sinistra (INSERT INTO...) ci sono i nomi delle colonne della tabella MySQL (italiano).
+    // A destra (VALUES :...) ci sono i segnaposto che riempiremo con i dati.
     $sql = "INSERT INTO utenti (nome, cognome, data_nascita, email, password)
             VALUES (:nome, :cognome, :data_nascita, :email, :pass)";
 
     try {
         $stmt = $pdo->prepare($sql);
 
-        // Eseguiamo l'inserimento
         $stmt->execute([
             'nome' => $nome,
             'cognome' => $cognome,
@@ -48,14 +48,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             'pass' => $password_hash
         ]);
 
-        echo "Registrazione completata con successo! Benvenuto " . htmlspecialchars($nome);
+        // --- SUCCESSO ---
+        echo "<h2 style='color: green; text-align: center; margin-top: 50px;'>Registrazione riuscita!</h2>";
+        echo "<p style='text-align: center;'>Benvenuto su coDHex, $nome. <br> <a href='index.html'>Torna alla Home</a></p>";
 
     } catch(PDOException $e) {
-        // Codice 23000 significa "Violazione vincolo unique" (email già esistente)
+        // Gestione errore Email Duplicata (codice 23000)
         if ($e->getCode() == 23000) {
-            echo "Errore: L'indirizzo email $email è già registrato.";
+            echo "Errore: L'indirizzo email <b>$email</b> è già registrato su coDHex.";
         } else {
-            echo "Errore generico del database: " . $e->getMessage();
+            echo "Errore del sistema: " . $e->getMessage();
         }
     }
 }

@@ -152,7 +152,7 @@ $cognome = $_SESSION['user_cognome'] ?? '';
 
 
 <div class="container">
-    <h1 align="center">Benvenuto nella tua Area Riservata</h1>
+    <h1 align="center">Benvenutə nella tua Area Riservata</h1>
     <p style="font-size: 1.1em;" align="center">Da qui potrai accedere alla home page e alla pagina di generazione delle fonti</p>
 </div>
 

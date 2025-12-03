@@ -133,32 +133,29 @@ document.addEventListener('DOMContentLoaded', () => {
             const formData = new FormData(form);
 
             // 2. Usiamo FETCH per inviare i dati a signup.php
+
+
             fetch('signup.php', {
                 method: 'POST',
                 body: formData
             })
-                .then(response => response.text()) // Leggiamo la risposta del PHP
+                .then(response => response.text())
                 .then(data => {
                     submitBtn.classList.remove('loading');
-                    console.log("Risposta dal server:", data);
 
-                    // 3. Controlliamo cosa ha risposto il PHP
-                    // Se la risposta contiene la parola "Errore"
+                    // Se il PHP risponde con un errore
                     if (data.includes("Errore")) {
-                        // Puliamo l'HTML dai tag per l'alert
+                        // Pulizia del messaggio HTML per l'alert
                         let messaggioPulito = data.replace(/<[^>]*>?/gm, '');
-                        alert(messaggioPulito); // Mostra l'errore (es. Email già usata)
+                        alert(messaggioPulito);
                     }
                     else {
-                        // SUCCESSO!
-                        // Nascondi il form
-                        form.style.display = 'none';
-
-                        // Mostra il messaggio di successo verde
-                        const successMessage = document.getElementById('successMessage');
-                        successMessage.classList.add('show');
+                        // --- SUCCESSO! ---
+                        // Qui avviene il reindirizzamento
+                        window.location.href = "pagina_riservata.html";
                     }
                 })
+
                 .catch(error => {
                     submitBtn.classList.remove('loading');
                     console.error('Errore di connessione:', error);

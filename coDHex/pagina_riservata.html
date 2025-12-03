@@ -1,137 +1,174 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>coDHex - Pagina riservata</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <title>Pagina riservata</title>
+
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        /* --- RESET E VARIABILI --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
 
         :root {
-            --bg-color: #FDFBF4;
-            --card-bg: #EBE7DE;
-            --input-bg: #B8B8B2;
-            --input-focus: #cfcfc9;
-            --primary-color: #B56952;
+            --primary-color: #B56952; /* Terracotta principale */
+            --secondary-color: #DDBEB9; /* Rosato chiaro */
+            --bg-light: #FDFBF4; /* Sfondo pagina crema chiaro */
+            --bg-medium: #EBE7DE; /* Sfondo sezioni beige */
             --text-dark: #333;
-            --text-muted: #555;
-            --white: #FFFFFF;
-            --radius-xl: 20px;
-            --radius-md: 10px;
-            --shadow-soft: 0 10px 30px rgba(0,0,0,0.05);
+            --text-light: #555;
+            --text-white: #FFFFFF;
+            --shadow-light: rgba(0,0,0,0.05);
+            --shadow-medium: rgba(181, 105, 82, 0.2);
+            --border-radius-lg: 20px;
+            --border-radius-md: 12px;
+            --padding-section: 60px 0;
         }
 
         body {
-            background: linear-gradient(135deg, var(--bg-color) 0%, #EFEAD8 100%);
+            background-color: var(--bg-light); /* Sfondo uniforme come nell'immagine */
             color: var(--text-dark);
+            line-height: 1.7;
             min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3 {
+            color: var(--text-dark);
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        h1 { font-size: 3em; line-height: 1.1; margin-top: 40px; }
+
+        /* Titolo sezione con sottolineatura */
+        h2 {
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+            color: var(--text-dark);
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 60px; /* Lunghezza della linea */
+            height: 5px; /* Spessore della linea */
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        h3 {
+            font-size: 1.2em; /* Dimensione testo card */
+            margin-top: 15px;
+            margin-bottom: 0;
+            color: var(--primary-color);
+        }
+
+        p { margin-bottom: 15px; color: var(--text-light); }
+
+        /* --- CARDS GRID --- */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        /* Link che avvolge la card per renderla cliccabile */
+        .card-link {
+            text-decoration: none;
+            display: block;
+            color: inherit;
+        }
+
+        .card {
+            background-color: #fff; /* Sfondo bianco della card */
+            padding: 50px 30px;
+            border-radius: var(--border-radius-lg);
+            box-shadow: 0 5px 20px var(--shadow-light); /* Ombra leggera */
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.02);
+            height: 100%;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 40px 20px;
         }
 
-        .main-card {
-            background-color: var(--card-bg);
-            width: 100%;
-            max-width: 800px;
-            padding: 40px;
-            border-radius: var(--radius-xl);
-            box-shadow: var(--shadow-soft);
-            border: 1px solid rgba(0,0,0,0.05);
+        /* Effetto Hover sulla card */
+        .card-link:hover .card {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px var(--shadow-medium);
         }
 
-        .header-section { text-align: center; margin-bottom: 30px; }
-        .header-section h2 { font-size: 2em; color: var(--text-dark); margin-bottom: 10px; font-weight: 700; }
-        .header-section p { color: var(--text-muted); }
-
-        /* Menu a tendina */
-        .select-wrapper { margin-bottom: 30px; position: relative; }
-        .select-label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--primary-color); font-size: 0.9rem; }
-
-        select {
-            width: 100%; padding: 15px; border-radius: var(--radius-md);
-            background-color: var(--input-bg); border: 2px solid transparent;
-            font-size: 16px; color: var(--text-dark); outline: none; cursor: pointer;
-            font-weight: 500; appearance: none;
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23333%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-            background-repeat: no-repeat; background-position: right 15px top 50%; background-size: 12px auto;
+        .card .icon {
+            font-size: 3.5em; /* Dimensione Icona */
+            color: var(--primary-color);
+            margin-bottom: 25px;
         }
-        select:focus { background-color: var(--input-focus); }
 
-        /* Griglia Form */
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .full-width { grid-column: span 2; }
-
-        /* Stile Input */
-        .input-group { position: relative; margin-bottom: 5px; }
-        .input-wrapper { position: relative; }
-
-        input[type="text"], input[type="number"], input[type="date"], input[type="url"] {
-            width: 100%; padding: 15px; padding-top: 25px; padding-bottom: 8px;
-            background-color: var(--input-bg); border: 2px solid transparent;
-            border-radius: var(--radius-md); font-size: 14px; color: var(--text-dark);
-            outline: none; font-weight: 500; transition: 0.3s;
-        }
-        input:focus { background-color: var(--input-focus); }
-
-        /* Floating Label */
-        .input-wrapper label {
-            position: absolute; left: 15px; top: 50%; transform: translateY(-50%);
-            color: #555; font-size: 14px; font-weight: 500; pointer-events: none; transition: 0.3s ease all;
-        }
-        input:focus + label, input:not(:placeholder-shown) + label {
-            top: 8px; font-size: 11px; transform: translateY(0); color: var(--text-dark); font-weight: 700;
-        }
-        .focus-border { display: none; }
-
-        /* LOGICA VISIBILITÀ SEZIONI */
-        .form-section { display: none; } /* Nascosto di base */
-        .form-section.active { display: grid; animation: fadeIn 0.5s ease; } /* Visibile e animato */
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Bottone */
-        .btn-submit {
-            width: 100%; margin-top: 30px; padding: 18px;
-            background-color: var(--primary-color); color: var(--white); border: none;
-            border-radius: var(--radius-md); font-size: 16px; font-weight: 700; cursor: pointer;
-            box-shadow: 0 10px 20px -5px rgba(181, 105, 82, 0.4); transition: transform 0.2s;
-            display: flex; justify-content: center; align-items: center; gap: 10px;
-        }
-        .btn-submit:hover { transform: translateY(-2px); background-color: #a35d48; }
-
-        /* Loader Spinner */
-        .btn-loader {
-            width: 16px; height: 16px; border: 2px solid #fff; border-bottom-color: transparent;
-            border-radius: 50%; display: none; animation: spin 1s linear infinite;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        @media (max-width: 600px) {
-            .form-section.active { grid-template-columns: 1fr; }
-            .full-width { grid-column: span 1; }
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5em; text-align: center; }
+            h2 { font-size: 2em; display: block; text-align: center; }
+            h2::after { left: 50%; transform: translateX(-50%); } /* Centra la linea su mobile */
+            .card { padding: 30px 20px; }
         }
     </style>
-
 </head>
 <body>
 
-<!--
-Bottone per arrivare alla pagina della generazione fonti
-Zona per raggiungere la bibliografia
--->
+
+<br> <br> <br> <br>
 
 
+<div class="container">
+    <h1 align="center">Benvenuto nella tua Area Riservata</h1>
+    <p style="font-size: 1.1em;" align="center">Da qui potrai accedere alla home page e alla pagina di generazione delle fonti</p>
+</div>
+
+<br>
+
+<section class="section">
+    <div class="container">
 
 
-<script>
+        <div class="cards-grid">
 
-</script>
+            <a href="index.html" class="card-link">
+                <div class="card">
+                    <i class="fas fa-home icon"></i>
+                    <h3>Home</h3>
+                </div>
+            </a>
 
+            <a href="generatorefonti.html" class="card-link">
+                <div class="card">
+                    <i class="fas fa-sync icon"></i>
+                    <h3>Generazione delle fonti</h3>
+                </div>
+            </a>
+
+        </div>
+    </div>
+</section>
 
 </body>
 </html>

@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- FUNZIONI DI VALIDAZIONE ---
-
     const validateName = () => {
         const isValid = nameInput.value.trim() !== '';
         showError(nameError, !isValid);
@@ -51,7 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const validateEmail = () => {
-        // Semplice regex per validazione email
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const isValid = emailRegex.test(emailInput.value.trim());
         showError(emailError, !isValid);
@@ -67,35 +65,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const validateConfirmPassword = () => {
         const passwordsMatch = passwordInput.value.trim() === confirmPasswordInput.value.trim();
         const isNotEmpty = confirmPasswordInput.value.trim() !== '';
-
         const isValid = passwordsMatch && isNotEmpty;
-
-        // Mostra errore solo se il campo non è vuoto e le password non corrispondono
         showError(confirmPasswordError, !passwordsMatch && isNotEmpty);
         return isValid;
     };
 
     const validateForm = () => {
-        // Esegui tutte le validazioni
         const isNameValid = validateName();
         const isSurnameValid = validateSurname();
         const isDateValid = validateDate();
         const isEmailValid = validateEmail();
         const isPasswordValid = validatePassword();
         const isConfirmPasswordValid = validateConfirmPassword();
-
-        // Ritorna true solo se tutti i campi sono validi
         return isNameValid && isSurnameValid && isDateValid && isEmailValid && isPasswordValid && isConfirmPasswordValid;
     };
 
     // --- GESTIONE TOGGLE PASSWORD ---
-
     const setupPasswordToggle = (toggleButton, inputField) => {
         toggleButton.addEventListener('click', () => {
             const eyeIcon = toggleButton.querySelector('.eye-icon');
             const type = inputField.getAttribute('type') === 'password' ? 'text' : 'password';
             inputField.setAttribute('type', type);
-
             if (type === 'text') {
                 eyeIcon.classList.add('show-password');
             } else {
@@ -104,29 +94,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // Attiva entrambi i toggle
     setupPasswordToggle(passwordToggle, passwordInput);
     setupPasswordToggle(confirmPasswordToggle, confirmPasswordInput);
 
-
-    // --- EVENT LISTENERS ---
-
-    // Aggiungi listener per validazione in tempo reale (mentre l'utente scrive)
-    // per nascondere l'errore non appena inizia a correggere
+    // --- EVENT LISTENERS (Input & Blur) ---
     nameInput.addEventListener('input', () => showError(nameError, false));
     surnameInput.addEventListener('input', () => showError(surnameError, false));
     dateInput.addEventListener('input', () => showError(dateError, false));
     emailInput.addEventListener('input', () => showError(emailError, false));
     passwordInput.addEventListener('input', () => {
         showError(passwordError, false);
-        // Se la conferma password era già stata inserita, rivalida
-        if (confirmPasswordInput.value) {
-            validateConfirmPassword();
-        }
+        if (confirmPasswordInput.value) validateConfirmPassword();
     });
     confirmPasswordInput.addEventListener('input', () => showError(confirmPasswordError, false));
 
-    // Aggiungi listener per validazione "on blur" (quando l'utente esce dal campo)
     nameInput.addEventListener('blur', validateName);
     surnameInput.addEventListener('blur', validateSurname);
     dateInput.addEventListener('blur', validateDate);
@@ -135,39 +116,61 @@ document.addEventListener('DOMContentLoaded', () => {
     confirmPasswordInput.addEventListener('blur', validateConfirmPassword);
 
 
-    // Gestione invio form
+    // --- GESTIONE INVIO FORM (MODIFICATA) ---
     form.addEventListener('submit', (e) => {
-        e.preventDefault(); // Impedisci l'invio tradizionale del form
+        e.preventDefault(); // Ferma il ricaricamento della pagina
 
         const isFormValid = validateForm();
 
         if (isFormValid) {
-            console.log('Form valido, invio in corso...');
+            console.log('Form valido, invio reale al server...');
 
-            // Mostra animazione di caricamento sul pulsante
+            // Mostra animazione di caricamento
             const submitBtn = form.querySelector('.login-btn');
             submitBtn.classList.add('loading');
 
-            // Simula un invio di rete (es. 2 secondi)
-            setTimeout(() => {
-                // Nascondi il form
-                form.style.display = 'none';
+            // 1. Raccogliamo i dati del form
+            const formData = new FormData(form);
 
-                // Mostra il messaggio di successo
-                const successMessage = document.getElementById('successMessage');
-                successMessage.classList.add('show');
+            // 2. Usiamo FETCH per inviare i dati a signup.php
+            fetch('signup.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.text()) // Leggiamo la risposta del PHP
+                .then(data => {
+                    submitBtn.classList.remove('loading');
+                    console.log("Risposta dal server:", data);
 
-                console.log('Registrazione completata!');
-            }, 2000);
+                    // 3. Controlliamo cosa ha risposto il PHP
+                    // Se la risposta contiene la parola "Errore"
+                    if (data.includes("Errore")) {
+                        // Puliamo l'HTML dai tag per l'alert
+                        let messaggioPulito = data.replace(/<[^>]*>?/gm, '');
+                        alert(messaggioPulito); // Mostra l'errore (es. Email già usata)
+                    }
+                    else {
+                        // SUCCESSO!
+                        // Nascondi il form
+                        form.style.display = 'none';
+
+                        // Mostra il messaggio di successo verde
+                        const successMessage = document.getElementById('successMessage');
+                        successMessage.classList.add('show');
+                    }
+                })
+                .catch(error => {
+                    submitBtn.classList.remove('loading');
+                    console.error('Errore di connessione:', error);
+                    alert("C'è stato un problema di connessione al server.");
+                });
 
         } else {
-            console.log('Form non valido, controlla i campi.');
-            // Scuoti il form per indicare l'errore
+            console.log('Form non valido');
+            // Shake effect
             const card = document.querySelector('.login-card');
             card.style.animation = 'shake 0.5s ease-in-out';
-            setTimeout(() => {
-                card.style.animation = '';
-            }, 500);
+            setTimeout(() => { card.style.animation = ''; }, 500);
         }
     });
 });

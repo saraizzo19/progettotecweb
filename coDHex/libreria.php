@@ -157,7 +157,7 @@ $citazioni = $stmt->fetchAll();
         <div class="empty-state">
             <h3>Non hai ancora salvato nessuna fonte.</h3>
             <p>Inizia subito a costruire la tua bibliografia.</p>
-            <a href="generatore_fonti.html" class="btn-add">Aggiungi la prima fonte</a>
+            <a href="generatorefonti.html" class="btn-add">Aggiungi la prima fonte</a>
         </div>
 
     <?php endif; ?>

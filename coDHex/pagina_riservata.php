@@ -184,6 +184,14 @@ $cognome = $_SESSION['user_cognome'] ?? '';
                             <h3>La mia libreria</h3>
                         </div>
         </a>
+<br> <br>
+
+    <a href="logout.php" class="card-link">
+                    <div class="card">
+                        <i class="fas fa-sign-out-alt icon"></i>
+                        <h3>Disconnetti</h3>
+                    </div>
+                </a>
 
         </div>
     </div>

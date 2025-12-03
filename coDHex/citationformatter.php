@@ -1,7 +1,7 @@
 <?php
 class CitationFormatter {
 
-    // Funzione principale che smista il lavoro
+
     public static function format($dati) {
         $tipo = $dati['tipo'];       // libro, articolo, sito
         $stile = $dati['formato_citazione']; // apa, mla, chicago, ieee
@@ -48,7 +48,7 @@ class CitationFormatter {
         }
     }
 
-    // --- LOGICA PER GLI ARTICOLI ---
+
     private static function formatArticolo($d, $stile) {
         $autore = $d['cognome_autore'] . ", " . substr($d['nome_autore'], 0, 1) . ".";
         $titoloArt = htmlspecialchars($d['titolo']);
@@ -72,7 +72,7 @@ class CitationFormatter {
         }
     }
 
-    // --- LOGICA PER I SITI WEB ---
+
     private static function formatSito($d, $stile) {
         $autore = $d['cognome_autore'] . ", " . substr($d['nome_autore'], 0, 1) . ".";
         $titoloPagina = htmlspecialchars($d['titolo']); // Titolo della pagina specifica

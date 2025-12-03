@@ -1,9 +1,7 @@
 <?php
-
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
-
     header("Location: signup.html");
     exit;
 }
@@ -179,6 +177,13 @@ $cognome = $_SESSION['user_cognome'] ?? '';
                     <h3>Generazione delle fonti</h3>
                 </div>
             </a>
+
+        <a href="libreria.php" class="card-link">
+                        <div class="card">
+                            <i class="fas fa-book icon"></i>
+                            <h3>La mia libreria</h3>
+                        </div>
+        </a>
 
         </div>
     </div>

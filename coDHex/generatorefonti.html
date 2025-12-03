@@ -214,7 +214,7 @@
 
             <div class="select-wrapper full-width">
                 <span class="select-label">Genere</span>
-                <select id="genre-b">
+                <select id="genre-b" name="genre-b">
                     <option value="" selected>N/A</option>
                     <option value="articoloimrad">Articolo IMRaD</option>
                     <option value="casostudio">Caso studio</option>
@@ -230,7 +230,7 @@
 
             <div class="select-wrapper full-width">
                 <span class="select-label">Formato di citazione</span>
-                <select id="citazione-b">
+                <select id="citazione-b" name="citazione-b">
                     <option value="apa" selected> APA</option>
                     <option value="mla">MLA</option>
                     <option value="chicago">Chicago</option>
@@ -313,7 +313,7 @@
 
             <div class="select-wrapper full-width">
                 <span class="select-label">Genere</span>
-                <select id="genre-a">
+                <select id="genre-a" name="genre-a">
                     <option value="" selected>N/A</option>
                     <option value="articoloimrad">Articolo IMRaD</option>
                     <option value="casostudio">Caso studio</option>
@@ -329,7 +329,7 @@
 
             <div class="select-wrapper full-width">
                 <span class="select-label">Formato di citazione</span>
-                <select id="citazione-a">
+                <select id="citazione-a" name="citazione-a">
                     <option value="apa" selected> APA</option>
                     <option value="mla">MLA</option>
                     <option value="chicago">Chicago</option>
@@ -396,7 +396,7 @@
 
             <div class="select-wrapper full-width">
                 <span class="select-label">Genere</span>
-                <select id="genre-w">
+                <select id="genre-w" name="genre-w">
                     <option value="" selected>N/A</option>
                     <option value="articoloimrad">Articolo IMRaD</option>
                     <option value="casostudio">Caso studio</option>
@@ -413,7 +413,7 @@
 
             <div class="select-wrapper full-width">
                 <span class="select-label">Formato di citazione</span>
-                <select id="citazione-w">
+                <select id="citazione-w" name="citazione-w">
                     <option value="apa" selected> APA</option>
                     <option value="mla">MLA</option>
                     <option value="chicago">Chicago</option>
@@ -430,48 +430,67 @@
             <span class="btn-loader"></span>
         </button>
 </form>
-<script>
+    <script>
     // --- LOGICA CAMBIO SCHEDA ---
     const sourceTypeSelect = document.getElementById('sourceType');
     const sections = document.querySelectorAll('.form-section');
 
     sourceTypeSelect.addEventListener('change', function() {
-        const selectedValue = this.value; // Prende il valore: libro, articolo, o sito
-
-        // 1. Nasconde TUTTE le sezioni
-        sections.forEach(section => {
-            section.classList.remove('active');
-        });
-
-        // 2. Mostra SOLO la sezione corrispondente all'ID (es. section-libro)
-        const activeSection = document.getElementById('section-' + selectedValue);
-        if (activeSection) {
-            activeSection.classList.add('active');
-        }
+    const selectedValue = this.value;
+    sections.forEach(section => section.classList.remove('active'));
+    const activeSection = document.getElementById('section-' + selectedValue);
+    if (activeSection) activeSection.classList.add('active');
     });
 
-    // --- LOGICA BOTTONE ---
+    // --- LOGICA INVIO REALE ---
     document.getElementById('sourceForm').addEventListener('submit', function(e) {
-        e.preventDefault();
+    e.preventDefault();
 
-        const btn = document.getElementById('submitBtn');
-        const btnText = btn.querySelector('.btn-text');
-        const btnLoader = btn.querySelector('.btn-loader');
+    const btn = document.getElementById('submitBtn');
+    const btnText = btn.querySelector('.btn-text');
+    const btnLoader = btn.querySelector('.btn-loader');
 
-        // Mostra caricamento
-        btnText.textContent = "Elaborazione...";
-        btnLoader.style.display = "block";
+    // Mostra caricamento
+    btnText.textContent = "Salvataggio in corso...";
+    btnLoader.style.display = "block";
+    btn.disabled = true;
 
-        // Simulazione invio
-        setTimeout(() => {
-            alert('Fonte inserita con successo! Tipo: ' + sourceTypeSelect.value);
-            btnText.textContent = "Inserisci fonte";
-            btnLoader.style.display = "none";
-        }, 1000);
+    // 1. Raccogliamo i dati
+    const formData = new FormData(this);
+
+    // 2. IMPORTANTE: Aggiungiamo manualmente il "Tipo" perché la select è fuori dal form
+    formData.append('sourceType', sourceTypeSelect.value);
+
+    // 3. Inviamo al PHP
+    fetch('save_citation.php', {
+    method: 'POST',
+    body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+    // Ripristina bottone
+    btnText.textContent = "Inserisci fonte";
+    btnLoader.style.display = "none";
+    btn.disabled = false;
+
+    if (data.includes("Errore")) {
+    alert(data);
+    } else {
+    alert('Fonte salvata correttamente!');
+    // Opzionale: Pulisce il form
+    document.getElementById('sourceForm').reset();
+    }
+    })
+    .catch(error => {
+    console.error('Errore:', error);
+    alert("Errore di connessione al server.");
+    btnText.textContent = "Riprova";
+    btnLoader.style.display = "none";
+    btn.disabled = false;
     });
-</script>
+    });
 
-
+    </script>
 </div>
 </body>
 </html>

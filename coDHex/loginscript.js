@@ -72,27 +72,65 @@ document.addEventListener('DOMContentLoaded', () => {
     emailInput.addEventListener('blur', validateEmail);
     passwordInput.addEventListener('blur', validatePassword);
 
-    // Gestione invio form
+    // --- GESTIONE INVIO FORM (MODIFICATA CON PHP) ---
     form.addEventListener('submit', (e) => {
         e.preventDefault();
         const isFormValid = validateForm();
 
         if (isFormValid) {
-            console.log('Form valido, invio in corso...');
+            console.log('Form valido, invio reale al server...');
+
+            // Attiva l'animazione di caricamento sul bottone
             const submitBtn = form.querySelector('.login-btn');
             submitBtn.classList.add('loading');
 
-            setTimeout(() => {
-                // Nascondi form e link registrazione
-                form.style.display = 'none';
-                document.querySelector('.signup-link').style.display = 'none';
+            // 1. Raccogliamo i dati del form
+            const formData = new FormData(form);
 
-                // Mostra messaggio successo
-                const successMessage = document.getElementById('successMessage');
-                successMessage.classList.add('show');
+            // 2. Inviamo i dati a login.php tramite FETCH
+            fetch('login.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.text()) // Leggiamo la risposta del server
+                .then(data => {
 
-                console.log('Login completato!');
-            }, 2000);
+                    // 3. Controlliamo cosa ha risposto il server
+                    if (data.includes("Errore")) {
+                        // --- CASO ERRORE ---
+                        submitBtn.classList.remove('loading'); // Ferma il caricamento
+
+                        // Puliamo il messaggio da eventuali tag HTML e mostriamo l'alert
+                        let messaggioPulito = data.replace(/<[^>]*>?/gm, '');
+                        alert(messaggioPulito);
+                    }
+                    else {
+                        // --- CASO SUCCESSO ---
+                        // Qui manteniamo la tua bella animazione!
+
+                        // Nascondi form e link registrazione
+                        form.style.display = 'none';
+                        const signupLink = document.querySelector('.signup-link');
+                        if(signupLink) signupLink.style.display = 'none';
+
+                        // Mostra messaggio successo (spunta verde)
+                        const successMessage = document.getElementById('successMessage');
+                        successMessage.classList.add('show');
+
+                        console.log('Login completato! Reindirizzamento...');
+
+                        // Aspettiamo 1.5 secondi per far vedere la spunta verde, poi cambiamo pagina
+                        setTimeout(() => {
+                            window.location.href = 'pagina_riservata.php';
+                        }, 1500);
+                    }
+                })
+                .catch(error => {
+                    // Caso errore di rete (server spento, no internet)
+                    submitBtn.classList.remove('loading');
+                    console.error('Errore:', error);
+                    alert("Impossibile connettersi al server. Verifica che XAMPP sia acceso.");
+                });
 
         } else {
             console.log('Form non valido, controlla i campi.');

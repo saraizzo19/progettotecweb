@@ -1,3 +1,17 @@
+<?php
+
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+
+    header("Location: signup.html");
+    exit;
+}
+
+$nome = $_SESSION['user_nome'] ?? 'Utente';
+$cognome = $_SESSION['user_cognome'] ?? '';
+?>
+
 <!DOCTYPE html>
 <html lang="it">
 <head>

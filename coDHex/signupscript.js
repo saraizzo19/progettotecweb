@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     else {
                         // --- SUCCESSO! ---
                         // Qui avviene il reindirizzamento
-                        window.location.href = "pagina_riservata.html";
+                        window.location.href = "pagina_riservata.php";
                     }
                 })
 

@@ -15,14 +15,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // --- VALIDAZIONE ---
 
-    // Controllo campi vuoti (sicurezza extra oltre al 'required' HTML)
+    // Controllo campi vuoti
     if (empty($nome) || empty($cognome) || empty($data_nascita) || empty($email) || empty($password)) {
         die("Errore: Tutti i campi sono obbligatori.");
     }
 
     // Controllo password uguali
     if ($password !== $conferma_pwd) {
-        die("Errore: Le password non coincidono. <a href='javascript:history.back()'>Torna indietro</a>");
+        die("Errore: Le password non coincidono.");
     }
 
     // --- SALVATAGGIO NEL DB ---
@@ -30,10 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Criptiamo la password
     $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
-    // Prepariamo la query.
-    // NOTA BENE:
-    // A sinistra (INSERT INTO...) ci sono i nomi delle colonne della tabella MySQL (italiano).
-    // A destra (VALUES :...) ci sono i segnaposto che riempiremo con i dati.
+    // Prepariamo la query
     $sql = "INSERT INTO utenti (nome, cognome, data_nascita, email, password)
             VALUES (:nome, :cognome, :data_nascita, :email, :pass)";
 
@@ -48,9 +45,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             'pass' => $password_hash
         ]);
 
-        // --- SUCCESSO ---
-        echo "<h2 style='color: green; text-align: center; margin-top: 50px;'>Registrazione riuscita!</h2>";
-        echo "<p style='text-align: center;'>Benvenuto su coDHex, $nome. <br> <a href='index.html'>Torna alla Home</a></p>";
+        // ==========================================
+        //  NUOVA PARTE: CREAZIONE SESSIONE (Auto-Login)
+        // ==========================================
+
+        // 1. Recuperiamo l'ID che il database ha appena assegnato a questo utente
+        $nuovo_id = $pdo->lastInsertId();
+
+        // 2. Avviamo la sessione PHP
+        session_start();
+
+        // 3. Inseriamo i dati nel "biglietto" della sessione
+        $_SESSION['user_id'] = $nuovo_id;
+        $_SESSION['user_nome'] = $nome;
+        $_SESSION['user_cognome'] = $cognome;
+
+        // ==========================================
+
+        // Rispondiamo con un messaggio semplice.
+        // Il tuo JavaScript vedrà che non c'è scritto "Errore" e farà il redirect.
+        echo "Registrazione riuscita!";
 
     } catch(PDOException $e) {
         // Gestione errore Email Duplicata (codice 23000)

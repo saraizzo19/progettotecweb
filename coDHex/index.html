@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>coDHex - Home Page</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <!-- href per le icone utilizzate all'interno del sito -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"> <!-- href per importare il font utilizzato all'interno del sito-->
 
     <style>
 
@@ -18,10 +18,10 @@
 
 
         :root {
-            --primary-color: #B56952; /* Terracotta principale */
-            --secondary-color: #DDBEB9; /* Rosato chiaro per accenti */
-            --bg-light: #FDFBF4; /* Sfondo pagina crema chiaro */
-            --bg-medium: #EBE7DE; /* Sfondo sezioni beige */
+            --primary-color: #B56952;
+            --secondary-color: #DDBEB9;
+            --bg-light: #FDFBF4;
+            --bg-medium: #EBE7DE;
             --text-dark: #333;
             --text-light: #555;
             --text-white: #FFFFFF;
@@ -44,7 +44,7 @@
             padding: 0 20px;
         }
 
-        /* --- TYPOGRAPHY --- */
+
         h1, h2, h3, h4 {
             color: var(--text-dark);
             font-weight: 700;
@@ -58,7 +58,7 @@
 
         .text-center { text-align: center; }
 
-        /* --- Bottoni --- */
+
         .btn {
             display: inline-block;
             padding: 15px 30px;
@@ -95,12 +95,12 @@
         }
 
 
-        /* --- LOGIN BUTTON NAVBAR --- */
+
         .btn-nav-login {
             background-color: var(--primary-color);
-            color: var(--text-white) !important; /* !important per sovrascrivere il colore dei link standard */
+            color: var(--text-white) !important;
             padding: 10px 25px;
-            border-radius: 50px; /* Molto arrotondato */
+            border-radius: 50px;
             margin-left: 25px;
             box-shadow: 0 4px 15px var(--shadow-medium);
             transition: all 0.3s ease;
@@ -113,18 +113,18 @@
             text-decoration: none;
         }
 
-        /* Adattamento per Mobile */
+
         @media (max-width: 768px) {
             .btn-nav-login {
                 margin-left: 0;
                 margin-top: 15px;
                 display: inline-block;
-                width: 80%; /* Più largo su mobile */
+                width: 80%;
                 text-align: center;
             }
         }
 
-        /* --- NAVBAR --- */
+
         .navbar {
             background-color: var(--bg-medium);
             padding: 20px 0;
@@ -163,7 +163,7 @@
             color: var(--primary-color);
         }
 
-        /* Hamburger menu (mobile) */
+
         .menu-toggle {
             display: none;
             flex-direction: column;
@@ -181,7 +181,7 @@
                 display: none;
                 flex-direction: column;
                 position: absolute;
-                top: 80px; /* Adjust based on navbar height */
+                top: 80px;
                 left: 0;
                 width: 100%;
                 background-color: var(--bg-medium);
@@ -203,7 +203,7 @@
         }
 
 
-        /* --- HERO SECTION --- */
+
         .hero {
             padding: var(--padding-section);
             text-align: center;
@@ -232,7 +232,7 @@
             margin: 0 10px;
         }
 
-        /* --- ABOUT/GENERAL SECTION --- */
+
         .section {
             padding: var(--padding-section);
             background-color: var(--bg-medium);
@@ -242,7 +242,7 @@
             border: 1px solid rgba(0,0,0,0.05);
         }
         .section-light {
-            background-color: var(--bg-light); /* Per variare lo sfondo tra le sezioni */
+            background-color: var(--bg-light);
             box-shadow: none;
             border: none;
         }
@@ -252,7 +252,7 @@
             position: relative;
             display: inline-block;
         }
-        .section h2::after { /* Sottolineatura custom */
+        .section h2::after {
             content: '';
             position: absolute;
             left: 0;
@@ -279,7 +279,7 @@
             margin-bottom: 0;
         }
 
-        /* --- SERVICES / FEATURES SECTION --- */
+
         .cards-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -317,7 +317,7 @@
             color: var(--text-light);
         }
 
-        /* --- CTA SECTION --- */
+
         .cta-section {
             background-color: var(--primary-color);
             color: var(--text-white);
@@ -376,13 +376,13 @@
             color: var(--text-dark);
         }
 
-        /* --- RESPONSIVE ADJUSTMENTS --- */
+
         @media (max-width: 992px) {
             .hero h1 { font-size: 3em; }
             .hero p { font-size: 1.1em; }
             h2 { font-size: 2em; }
             .grid-2-cols { grid-template-columns: 1fr; }
-            .grid-item-img { order: -1; margin-bottom: 30px; } /* Immagine sopra il testo su mobile */
+            .grid-item-img { order: -1; margin-bottom: 30px; }
         }
 
         @media (max-width: 768px) {
@@ -462,19 +462,16 @@
             <div class="card">
                 <div class="icon"><i class="fas fa-desktop"></i></div>
                 <h3>Digitalizzazione delle fonti</h3>
-               <!-- <p>Le tue fonti vengono digitalizzate e categorizzate in base al genere della fonte indicata.</p> -->
             </div>
 
             <div class="card">
                 <div class="icon"><i class="fas fa-refresh"></i></div>
                 <h3>Generazione delle fonti</h3>
-                <!--   <p>Le tue fonti vengono conservate all'interno del tuo profilo in una sezione apposita per permettere la continua consultazione.</p> -->
-            </div>
+                 </div>
             <div class="card">
                 <div class="icon"><i class="fas fa-archive"></i></div>
                 <h3>Conservazione delle fonti</h3>
-              <!--   <p>Le tue fonti vengono conservate all'interno del tuo profilo in una sezione apposita per permettere la continua consultazione.</p> -->
-            </div>
+                </div>
 
 
 
@@ -489,19 +486,16 @@
             <div class="card">
                 <div class="icon"><i class="fas fa-handshake"></i></div>
                 <h3>Da studenti per studenti</h3>
-              <!--  <p>Il nostro progetto si basa su una problematica reale affrontata dal nostro team in prima persona.</p> -->
-            </div>
+              </div>
             <div class="card">
                 <div class="icon"><i class="fas fa-graduation-cap"></i></div>
                 <h3>Approccio universitario</h3>
-              <!--  <p>Offriamo diversi formati di citazione per permettere il più semplice e veloce sistema di bibliografia</p> -->
-            </div>
+                   </div>
 
             <div class="card">
                 <div class="icon"><i class="fas fa-bookmark"></i></div>
                 <h3>Supporto per le DH</h3>
-                <!--  <p>Offriamo diversi formati di citazione per permettere il più semplice e veloce sistema di bibliografia</p> -->
-            </div>
+               </div>
         </div>
     </div>
 </section>
@@ -521,7 +515,7 @@
 </footer>
 
 <script>
-    // Smooth scrolling for navigation links
+
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
@@ -530,22 +524,34 @@
                 behavior: 'smooth'
             });
 
-            // Close mobile menu if open
+            //Questo blocco serve per evitare che lo scorrimento tra i vari link con attributo href che inizia con # sia meccanico, garantendo un movimento smooth
+
+
             if (document.getElementById('main-nav').classList.contains('active')) {
                 document.getElementById('main-nav').classList.remove('active');
                 document.getElementById('mobile-menu').classList.remove('active');
             }
+            //Questo blocco serve per chi apre il sito da telefono. Se la barra di navigazione è aperta, viene chiusa
         });
     });
 
-    // Mobile menu toggle
+
+    // Assegna a due costanti gli elementi HTML del menu e della navigazione
     const mobileMenu = document.getElementById('mobile-menu');
     const mainNav = document.getElementById('main-nav');
 
+    // Aggiunge un "ascoltatore" sul click dell'icona del menu
     mobileMenu.addEventListener('click', () => {
-        mobileMenu.classList.toggle('active');
-        mainNav.classList.toggle('active');
+
+        // 'toggle' è una funzione intelligente:
+        // Se la classe 'active' non c'è, la aggiunge (apre il menu).
+        // Se la classe 'active' c'è già, la toglie (chiude il menu).
+
+        mobileMenu.classList.toggle('active'); // Anima l'icona
+        mainNav.classList.toggle('active');    // Mostra o nasconde i link di navigazione
     });
+
+
 </script>
 </body>
 </html>

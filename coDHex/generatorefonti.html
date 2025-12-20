@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-
+        /* TEMPLATE DA CODEPEN GLASSMORPHISM LOGIN FORM MODIFICATO IN BASE ALLO STILE PREFERITO */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
         :root {
@@ -62,11 +62,10 @@
         }
         select:focus { background-color: var(--input-focus); }
 
-        /* Griglia Form */
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .full-width { grid-column: span 2; }
 
-        /* Stile Input */
+
         .input-group { position: relative; margin-bottom: 5px; }
         .input-wrapper { position: relative; }
 
@@ -78,7 +77,6 @@
         }
         input:focus { background-color: var(--input-focus); }
 
-        /* Floating Label */
         .input-wrapper label {
             position: absolute; left: 15px; top: 50%; transform: translateY(-50%);
             color: #555; font-size: 14px; font-weight: 500; pointer-events: none; transition: 0.3s ease all;
@@ -88,13 +86,11 @@
         }
         .focus-border { display: none; }
 
-        /* LOGICA VISIBILITÀ SEZIONI */
-        .form-section { display: none; } /* Nascosto di base */
-        .form-section.active { display: grid; animation: fadeIn 0.5s ease; } /* Visibile e animato */
+        .form-section { display: none; }
+        .form-section.active { display: grid; animation: fadeIn 0.5s ease; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Bottone */
         .btn-submit {
             width: 100%; margin-top: 30px; padding: 18px;
             background-color: var(--primary-color); color: var(--white); border: none;
@@ -104,7 +100,7 @@
         }
         .btn-submit:hover { transform: translateY(-2px); background-color: #a35d48; }
 
-        /* Loader Spinner */
+
         .btn-loader {
             width: 16px; height: 16px; border: 2px solid #fff; border-bottom-color: transparent;
             border-radius: 50%; display: none; animation: spin 1s linear infinite;
@@ -119,16 +115,16 @@
 </head>
 <body>
 
-
+<!-- Div per titolo e paragrafo, sopra il form-->
 <div class="main-card">
     <div class="header-section">
         <h2>Aggiungere una fonte</h2>
         <p>Utilizza il form per aggiungere una fonte alla tua bibliografia</p>
     </div>
-
+<!-- Div per la scelta della fonte -->
     <div class="select-wrapper">
         <span class="select-label">Tipo di fonte</span>
-
+<!-- Select per poter scegliere il tipo di fonte da salvare-->
         <select id="sourceType">
             <option value="libro" selected>Libro</option>
             <option value="articolo">Articolo</option>
@@ -137,9 +133,10 @@
     </div>
 
     <form id="sourceForm" novalidate>
-
+<!-- Sezione della select della fonte, in questo caso Libro-->
         <div id="section-libro" class="form-grid form-section active">
-
+<!-- b sta per book, e dividere quindi gli id dalle altre fonti (a per article e w per website)-->
+            <!-- authorfname sta per first name-->
             <div class="input-group">
                 <div class="input-wrapper">
                     <input type="text" id="authorfname-b" name="authorfname-b" placeholder=" " required>
@@ -147,7 +144,7 @@
                     <span class="focus-border"></span>
                 </div>
             </div>
-
+            <!-- authorlname sta per last name-->
             <div class="input-group">
                 <div class="input-wrapper">
                     <input type="text" id="authorlname-b" name="authorlname-b" placeholder=" " required>
@@ -211,7 +208,7 @@
                     <span class="focus-border"></span>
                 </div>
             </div>
-
+<!-- Select per selezionare il genere della fonte -->
             <div class="select-wrapper full-width">
                 <span class="select-label">Genere</span>
                 <select id="genre-b" name="genre-b">
@@ -227,6 +224,7 @@
                     <option value="policypaper">Policy Paper</option>
                 </select>
             </div>
+            <!-- Select per selezionare il formato di citazione con cui salvare la fonte -->
 
             <div class="select-wrapper full-width">
                 <span class="select-label">Formato di citazione</span>
@@ -241,7 +239,7 @@
 
 
         </div>
-
+<!-- Div per l'articolo, strutturato allo stesso modo del libro-->
         <div id="section-articolo" class="form-grid form-section">
 
             <div class="input-group">
@@ -341,7 +339,7 @@
             </div>
 
 
-
+<!-- Div per il sito web-->
         <div id="section-sito" class="form-grid form-section">
 
             <div class="input-group">
@@ -424,48 +422,54 @@
 
         </div>
 
-
+<!-- Bottone per l'invio del form -->
         <button type="submit" class="btn-submit" id="submitBtn">
             <span class="btn-text">Inserisci fonte</span>
             <span class="btn-loader"></span>
         </button>
 </form>
     <script>
-    // --- LOGICA CAMBIO SCHEDA ---
+    // Seleziona il menù a tendina dall'HTML, seleziona tutte le sezioni che hanno la classe form-selection
     const sourceTypeSelect = document.getElementById('sourceType');
     const sections = document.querySelectorAll('.form-section');
-
+//Ascolta quando l'utente cambia opzione
     sourceTypeSelect.addEventListener('change', function() {
+        //Prende il valore scelto, tra libro, articolo e sito web
     const selectedValue = this.value;
+    //Quando viene scelto il valore, nasconde gli altri
     sections.forEach(section => section.classList.remove('active'));
+    //Ricerca della sezione specifica da mostrare
     const activeSection = document.getElementById('section-' + selectedValue);
+    //Mostra solo la classe attiva
     if (activeSection) activeSection.classList.add('active');
     });
 
-    // --- LOGICA INVIO REALE ---
+    //Impedisce di ricaricare la pagina, permettendo il messaggio di successo
     document.getElementById('sourceForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
+//Sezione che permette un feedback visivo all'utente
     const btn = document.getElementById('submitBtn');
     const btnText = btn.querySelector('.btn-text');
     const btnLoader = btn.querySelector('.btn-loader');
 
-    // Mostra caricamento
+
     btnText.textContent = "Salvataggio in corso...";
     btnLoader.style.display = "block";
     btn.disabled = true;
 
-    // 1. Raccogliamo i dati
+    //Pacchetto che spedisce tutti i dati inseriti in input nel form
     const formData = new FormData(this);
 
-    // 2. IMPORTANTE: Aggiungiamo manualmente il "Tipo" perché la select è fuori dal form
+    // 2. IMPORTANTE: aggiunto manualmente il "tipo" perché la select è fuori dal form
     formData.append('sourceType', sourceTypeSelect.value);
 
-    // 3. Inviamo al PHP
+    // Invio dei dati al php per salvare la citazione, uso del metodo post
     fetch('save_citation.php', {
     method: 'POST',
     body: formData
     })
+        //Attesa della risposta del server php, conversione in testo, gestione della risposta finale
     .then(response => response.text())
     .then(data => {
     // Ripristina bottone
@@ -473,6 +477,7 @@
     btnLoader.style.display = "none";
     btn.disabled = false;
 
+    //Se tutto va correttamente, pulisce i campi
     if (data.includes("Errore")) {
     alert(data);
     } else {
@@ -481,6 +486,7 @@
     document.getElementById('sourceForm').reset();
     }
     })
+        //Il catch scatta solo se c'è errore di rete
     .catch(error => {
     console.error('Errore:', error);
     alert("Errore di connessione al server.");

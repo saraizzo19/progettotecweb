@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"> <!-- href per importare il font utilizzato all'interno del sito-->
 
     <style>
+        /* TEMPLATE DA CODEPEN GLASSMORPHISM LOGIN FORM MODIFICATO IN BASE ALLO STILE PREFERITO */
 
         * {
             margin: 0;
@@ -405,6 +406,9 @@
 </head>
 <body>
 
+
+<!-- Nav bar per la navigazione veloce, href home, href chi siamo, href servizi, href contatti, con link per l'accesso-->
+<!--Utilizzo del codice "fas fa" per avere icone carine senza dover scaricare i file (https://fontawesome.com/)-->
 <nav class="navbar">
     <div class="container">
         <a href="#" class="navbar-brand">coDHex</a>
@@ -413,6 +417,7 @@
             <span></span>
             <span></span>
         </div>
+        <!--href a tutte le sezioni della pagina-->
         <div class="navbar-nav" id="main-nav">
             <a href="#home">Home</a>
             <a href="#about">Chi siamo</a>
@@ -425,7 +430,7 @@
         </div>
     </div>
 </nav>
-
+<!--Sezione in cui spieghiamo il nostro progetto, con href che permette il collegamento con i vari punti nella pagina-->
 <section class="hero" id="home">
     <div class="container">
         <h1>Digitalizza le tue <span>citazioni bibliografiche</span> con coDHex</h1>
@@ -436,7 +441,7 @@
         </div>
     </div>
 </section>
-
+<!--Sezione about in cui spieghiamo chi siamo e perché il nostro progetto si chiama coDHex, con relativi titoli e paragrafi-->
 <section class="section" id="about">
     <div class="container">
         <h2 class="text-center">Chi siamo</h2>
@@ -455,6 +460,7 @@
     </div>
 </section>
 
+<!-- Sezione servizi, in cui vengono descritti in poche parole i nostri servizi, ognuno in un div card per ottenere un effetto stilistico moderno-->
 <section class="section section-light" id="services">
     <div class="container">
         <h2 class="text-center">I nostri servizi</h2>
@@ -478,7 +484,7 @@
         </div>
     </div>
 </section>
-
+<!--Stesso stile della sezione precedente, quindi con card moderne, in cui viene spiegato perché scegliere coDHex-->
 <section class="section" id="features">
     <div class="container">
         <h2 class="text-center">Perché scegliere coDHex</h2>
@@ -500,6 +506,7 @@
     </div>
 </section>
 
+<!--Ultima sezione per i contatti e per il copyright-->
 <section class="cta-section" id="contact">
     <div class="container">
         <h2>Prontə a digitalizzare la tua bibliografia?</h2>
@@ -524,14 +531,14 @@
                 behavior: 'smooth'
             });
 
-            //Questo blocco serve per evitare che lo scorrimento tra i vari link con attributo href che inizia con # sia meccanico, garantendo un movimento smooth
+            //Questo blocco serve per evitare che lo scorrimento tra i vari link con attributo href che inizia con # sia meccanico, in modo da avere un movimento scorrevole tra le sezioni.
 
 
             if (document.getElementById('main-nav').classList.contains('active')) {
                 document.getElementById('main-nav').classList.remove('active');
                 document.getElementById('mobile-menu').classList.remove('active');
             }
-            //Questo blocco serve per chi apre il sito da telefono. Se la barra di navigazione è aperta, viene chiusa
+            //Questo blocco serve per chi apre il sito da telefono. Se la barra di navigazione è aperta, viene chiusa.
         });
     });
 
@@ -543,9 +550,7 @@
     // Aggiunge un "ascoltatore" sul click dell'icona del menu
     mobileMenu.addEventListener('click', () => {
 
-        // 'toggle' è una funzione intelligente:
-        // Se la classe 'active' non c'è, la aggiunge (apre il menu).
-        // Se la classe 'active' c'è già, la toglie (chiude il menu).
+        // toggle è una funzione intelligente: se la classe 'active' non c'è, la aggiunge (apre il menu). Se la classe 'active' c'è già, la toglie (chiude il menu).
 
         mobileMenu.classList.toggle('active'); // Anima l'icona
         mainNav.classList.toggle('active');    // Mostra o nasconde i link di navigazione

@@ -1,8 +1,8 @@
 <?php
-//Codice per la creazione della connessione con il db
+// Codice per la creazione della connessione con il db
 $host = 'localhost';
 $db   = 'codhex';
-$user = 'root';      /
+$user = 'root';
 $pass = '';
 $charset = 'utf8mb4';
 
@@ -16,7 +16,6 @@ $options = [
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
 } catch (\PDOException $e) {
-    // Se la connessione fallisce allora ferma tutto, mostrando l'errore
+    // In produzione non dovresti mostrare l'errore completo all'utente, ma per ora va bene
     throw new \PDOException($e->getMessage(), (int)$e->getCode());
 }
-?>

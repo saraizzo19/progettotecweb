@@ -6,7 +6,6 @@ require 'db_connect.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-
     $email = $_POST['email'] ?? '';
     $password = $_POST['password'] ?? '';
 
@@ -21,19 +20,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->execute(['email' => $email]);
         $user = $stmt->fetch(); // Prende i dati dell'utente (se esiste)
 
-
+        // Verifica password
         if ($user && password_verify($password, $user['password'])) {
-
 
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_nome'] = $user['nome'];
             $_SESSION['user_cognome'] = $user['cognome'];
 
-
-            echo "Login riuscito!";
+            // --- MODIFICA FONDAMENTALE QUI SOTTO ---
+            // Deve restituire solo "success" affinché il JS faccia il redirect
+            echo "success";
 
         } else {
-
             echo "Errore: Credenziali non valide (Email o Password errati).";
         }
 

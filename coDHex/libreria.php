@@ -1,22 +1,31 @@
 <?php
-
+// Avvia la sessione per poter leggere i dati dell'utente loggato
 session_start();
+
+// Verifica se l'utente è autenticato controllando la presenza di 'user_id' nella sessione
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.html"); // Se non sei loggato, via al login
-    exit;
+    header("Location: login.html"); // Reindirizza al login se non autenticato
+    exit; // Interrompe l'esecuzione dello script immediatamente
 }
 
-
+// Include il file per la connessione al database ($pdo)
 require 'db_connect.php';
+// Include la classe helper che si occupa di formattare le stringhe in base al tipo di formattazione decisa
 require 'citationformatter.php';
 
+$uid = $_SESSION['user_id']; // Recupera l'ID dell'utente dalla sessione corrente
 
-$uid = $_SESSION['user_id'];
-
-
+// Con la query sql, vengono selezionate tutte le righe dalla tabella 'bibliografia' associate all'utente loggato
+// Ordine dalla più recente alla più vecchia (DESC)
 $sql = "SELECT * FROM bibliografia WHERE utente_id = :uid ORDER BY created_at DESC";
+
+// Prepara la query per prevenire SQL Injection
 $stmt = $pdo->prepare($sql);
+
+// Esegue la query passando l'ID utente come parametro sicuro
 $stmt->execute(['uid' => $uid]);
+
+// Recupera tutti i risultati in un array associativo
 $citazioni = $stmt->fetchAll();
 ?>
 
@@ -29,7 +38,7 @@ $citazioni = $stmt->fetchAll();
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
-
+        /* TEMPLATE DA CODEPEN MODIFICATO IN BASE ALLO STILE PREFERITO */
         :root {
             --bg-color: #FDFBF4;
             --card-bg: #EBE7DE;
@@ -46,12 +55,13 @@ $citazioni = $stmt->fetchAll();
             padding: 40px 20px;
         }
 
+
         .container {
             max-width: 900px;
             margin: 0 auto;
         }
 
-        /* Header */
+
         header {
             display: flex;
             justify-content: space-between;
@@ -72,7 +82,7 @@ $citazioni = $stmt->fetchAll();
         }
         .btn-back:hover { background-color: var(--text-dark); color: #fff; }
 
-        /* LISTA DELLE CITAZIONI */
+
         .citation-card {
             background-color: #fff;
             padding: 25px;
@@ -87,10 +97,10 @@ $citazioni = $stmt->fetchAll();
             font-size: 1.1em;
             line-height: 1.6;
             margin-bottom: 15px;
-            padding-right: 40px; /* Spazio per le icone a destra */
+            padding-right: 40px;
         }
 
-        /* Badge (etichette tipo APA, LIBRO, ecc) */
+
         .badges {
             display: flex;
             gap: 10px;
@@ -106,10 +116,11 @@ $citazioni = $stmt->fetchAll();
             color: #555;
         }
 
-        .badge.style { background-color: #e3f2fd; color: #1565c0; } /* Azzurro per lo stile */
-        .badge.type { background-color: #fce4ec; color: #c2185b; }  /* Rosa per il tipo */
 
-        /* Stato Vuoto */
+        .badge.style { background-color: #e3f2fd; color: #1565c0; }
+        .badge.type { background-color: #fce4ec; color: #c2185b; }
+
+
         .empty-state {
             text-align: center;
             padding: 50px;
@@ -127,42 +138,52 @@ $citazioni = $stmt->fetchAll();
     </style>
 </head>
 <body>
-
+<!--div che contiene h1 e href per tornare alla pagina riservata-->
 <div class="container">
     <header>
         <h1>La tua bibliografia</h1>
         <a href="pagina_riservata.php" class="btn-back">← Torna alla pagina riservata</a>
     </header>
 
-    <?php if (count($citazioni) > 0): ?>
+    <?php
+    // Verifica se l'array $citazioni contiene elementi (count > 0)
+    if (count($citazioni) > 0):
+    ?>
 
         <div class="citations-list">
-            <?php foreach ($citazioni as $riga): ?>
+            <?php
+            // Iterazione attraverso ogni riga recuperata dal database
+            foreach ($citazioni as $riga):
+            ?>
                 <div class="citation-card">
                     <div class="citation-text">
-                        <?php echo citationformatter::format($riga); ?>
+                        <?php
+                        // Richiama la classe helper per formattare la stringa secondo il formato di citazione
+                        echo citationformatter::format($riga);
+                        ?>
                     </div>
 
                     <div class="badges">
                         <span class="badge style"><?php echo htmlspecialchars($riga['formato_citazione']); ?></span>
+
                         <span class="badge type"><?php echo htmlspecialchars($riga['tipo']); ?></span>
+
                         <span class="badge date">Aggiunto il <?php echo date('d/m/Y', strtotime($riga['created_at'])); ?></span>
                     </div>
                 </div>
-            <?php endforeach; ?>
+            <?php endforeach; // Fine del ciclo delle citazioni ?>
         </div>
 
     <?php else: ?>
-
         <div class="empty-state">
             <h3>Non hai ancora salvato nessuna fonte.</h3>
             <p>Inizia subito a costruire la tua bibliografia.</p>
             <a href="generatorefonti.html" class="btn-add">Aggiungi la prima fonte</a>
         </div>
 
-    <?php endif; ?>
+    <?php endif; // Fine del controllo if/else ?>
 
-</div>
+    </div>
 
 </body>
 </html>

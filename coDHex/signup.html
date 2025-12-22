@@ -6,7 +6,7 @@
     <title>coDHex Signup Form</title>
 
     <style>
-        @charset "UTF-8";
+        /* TEMPLATE DA CODEPEN GLASSMORPHISM LOGIN FORM MODIFICATO IN BASE ALLO STILE PREFERITO */
         @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
 
         * {
@@ -392,7 +392,6 @@
             font-weight: 400;
         }
 
-        /* --- PASSWORD TOGGLE CORRETTO (INIZIO) --- */
         .password-wrapper {
             position: relative;
         }
@@ -433,10 +432,8 @@
         input[type="password"]::-ms-clear {
             display: none;
         }
-        /* --- PASSWORD TOGGLE CORRETTO (FINE) --- */
 
 
-        /* Form Options */
         .form-options {
             display: flex;
             justify-content: space-between;
@@ -474,13 +471,13 @@
             color: rgb(0, 0, 0);
         }
 
-        /* Login Button */
+
         .login-btn {
             width: 100%;
             margin-bottom: 24px;
         }
 
-        /* Divider */
+
         .divider {
             text-align: center;
             margin: 24px 0;
@@ -512,7 +509,6 @@
             white-space: nowrap;
         }
 
-        /* Signup Link */
         .signup-link {
             text-align: center;
         }
@@ -561,6 +557,7 @@
         }
     </style>
 </head>
+
 <body>
 <div class="login-container">
     <div class="login-card">
@@ -570,6 +567,7 @@
         </div>
 
         <form class="login-form" id="signupForm" action="signup.php" method="POST" novalidate>
+
             <div class="form-group">
                 <div class="input-wrapper">
                     <input type="text" id="name" name="name" required autocomplete="name">
@@ -655,7 +653,10 @@
 </div>
 
 <script>
+    // Attende che l'HTML sia completamente caricato prima di eseguire lo script
     document.addEventListener('DOMContentLoaded', () => {
+
+
         const form = document.getElementById('signupForm');
 
         // Campi di input
@@ -666,7 +667,7 @@
         const passwordInput = document.getElementById('password');
         const confirmPasswordInput = document.getElementById('confirmPassword');
 
-        // Messaggi di errore
+        // Elementi per i messaggi di errore
         const nameError = document.getElementById('nameError');
         const surnameError = document.getElementById('surnameError');
         const dateError = document.getElementById('dateError');
@@ -674,11 +675,11 @@
         const passwordError = document.getElementById('passwordError');
         const confirmPasswordError = document.getElementById('confirmPasswordError');
 
-        // Toggle visibilità password
+        // Bottoni toggle per la visibilità password
         const passwordToggle = document.getElementById('passwordToggle');
         const confirmPasswordToggle = document.getElementById('confirmPasswordToggle');
 
-        // Funzione per mostrare/nascondere l'errore
+        // Funzione helper per aggiungere/rimuovere la classe CSS che mostra l'errore
         const showError = (errorElement, show) => {
             if (show) {
                 errorElement.classList.add('show');
@@ -687,25 +688,29 @@
             }
         };
 
-        // --- FUNZIONI DI VALIDAZIONE ---
+
+        // Validazione Nome: non deve essere vuoto
         const validateName = () => {
             const isValid = nameInput.value.trim() !== '';
             showError(nameError, !isValid);
             return isValid;
         };
 
+        // Validazione Cognome: non deve essere vuoto
         const validateSurname = () => {
             const isValid = surnameInput.value.trim() !== '';
             showError(surnameError, !isValid);
             return isValid;
         };
 
+        // Validazione Data: non deve essere vuota
         const validateDate = () => {
             const isValid = dateInput.value.trim() !== '';
             showError(dateError, !isValid);
             return isValid;
         };
 
+        // Validazione Email: usa una regex per controllare il formato (x@y.z)
         const validateEmail = () => {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             const isValid = emailRegex.test(emailInput.value.trim());
@@ -713,20 +718,24 @@
             return isValid;
         };
 
+        // Validazione Password: lunghezza minima 8 caratteri
         const validatePassword = () => {
             const isValid = passwordInput.value.trim().length >= 8;
             showError(passwordError, !isValid);
             return isValid;
         };
 
+        // Validazione Conferma Password: deve essere uguale alla password inserita
         const validateConfirmPassword = () => {
             const passwordsMatch = passwordInput.value.trim() === confirmPasswordInput.value.trim();
             const isNotEmpty = confirmPasswordInput.value.trim() !== '';
             const isValid = passwordsMatch && isNotEmpty;
+            // Mostra errore solo se non corrispondono e il campo non è vuoto
             showError(confirmPasswordError, !passwordsMatch && isNotEmpty);
             return isValid;
         };
 
+        // Funzione Master: esegue tutte le validazioni e ritorna true solo se TUTTE passano
         const validateForm = () => {
             const isNameValid = validateName();
             const isSurnameValid = validateSurname();
@@ -737,12 +746,14 @@
             return isNameValid && isSurnameValid && isDateValid && isEmailValid && isPasswordValid && isConfirmPasswordValid;
         };
 
-        // --- GESTIONE TOGGLE PASSWORD ---
+        // Permette di cambiare l'attributo type da 'password' a 'text' e viceversa
         const setupPasswordToggle = (toggleButton, inputField) => {
             toggleButton.addEventListener('click', () => {
                 const eyeIcon = toggleButton.querySelector('.eye-icon');
                 const type = inputField.getAttribute('type') === 'password' ? 'text' : 'password';
                 inputField.setAttribute('type', type);
+
+                // Gestione visiva dell'icona
                 if (type === 'text') {
                     eyeIcon.classList.add('show-password');
                 } else {
@@ -754,17 +765,20 @@
         setupPasswordToggle(passwordToggle, passwordInput);
         setupPasswordToggle(confirmPasswordToggle, confirmPasswordInput);
 
-        // --- EVENT LISTENERS (Input & Blur) ---
+
+        // Evento 'input' che nasconde l'errore non appena l'utente inizia a scrivere
         nameInput.addEventListener('input', () => showError(nameError, false));
         surnameInput.addEventListener('input', () => showError(surnameError, false));
         dateInput.addEventListener('input', () => showError(dateError, false));
         emailInput.addEventListener('input', () => showError(emailError, false));
         passwordInput.addEventListener('input', () => {
             showError(passwordError, false);
+            // Se l'utente cambia la password principale, ricontrolla anche la conferma
             if (confirmPasswordInput.value) validateConfirmPassword();
         });
         confirmPasswordInput.addEventListener('input', () => showError(confirmPasswordError, false));
 
+        // Evento 'blur' che valida il campo quando l'utente clicca fuori (perde il focus)
         nameInput.addEventListener('blur', validateName);
         surnameInput.addEventListener('blur', validateSurname);
         dateInput.addEventListener('blur', validateDate);
@@ -773,54 +787,53 @@
         confirmPasswordInput.addEventListener('blur', validateConfirmPassword);
 
 
-        // --- GESTIONE INVIO FORM (MODIFICATA) ---
         form.addEventListener('submit', (e) => {
-            e.preventDefault(); // Ferma il ricaricamento della pagina
+            e.preventDefault(); // Ferma il ricaricamento standard della pagina
 
             const isFormValid = validateForm();
 
             if (isFormValid) {
                 console.log('Form valido, invio reale al server...');
 
-                // Mostra animazione di caricamento
+                // Mostra feedback visivo sul bottone
                 const submitBtn = form.querySelector('.login-btn');
                 submitBtn.classList.add('loading');
 
-                // 1. Raccogliamo i dati del form
+                // Raccoglie i dati del form in un oggetto FormData
                 const formData = new FormData(form);
 
-                // 2. Usiamo FETCH per inviare i dati a signup.php
+                // Invia i dati a signup.php tramite Fetch API (senza ricaricare)
                 fetch('signup.php', {
                     method: 'POST',
                     body: formData
                 })
-                    .then(response => response.text())
+                    .then(response => response.text()) // Converte la risposta del server in testo
                     .then(data => {
-                        submitBtn.classList.remove('loading');
+                        submitBtn.classList.remove('loading'); // Rimuove lo spinner
 
-                        // Se il PHP risponde con un errore
+                        // Analizza la risposta del PHP
+                        // Se contiene la parola "Errore"
                         if (data.includes("Errore")) {
-                            // Pulizia del messaggio HTML per l'alert
+                            // Pulisce eventuali tag HTML dalla risposta e mostra un alert
                             let messaggioPulito = data.replace(/<[^>]*>?/gm, '');
                             alert(messaggioPulito);
                         }
                         else {
-                            // --- SUCCESSO! ---
-                            // Qui avviene il reindirizzamento
+                            // Se non contiene errori reindirizza l'utente alla pagina riservata
                             window.location.href = "pagina_riservata.php";
                         }
                     })
-
+                    // Gestione errori di rete
                     .catch(error => {
                         submitBtn.classList.remove('loading');
                         console.error('Errore di connessione:', error);
-                        // NOTA: Questo alert apparirà se apri il file HTML senza un server
                         alert("C'è stato un problema di connessione al server.");
                     });
 
             } else {
+                // Se il form non è valido
                 console.log('Form non valido');
-                // Shake effect
+                // Effetto shake visivo sulla card
                 const card = document.querySelector('.login-card');
                 card.style.animation = 'shake 0.5s ease-in-out';
                 setTimeout(() => { card.style.animation = ''; }, 500);

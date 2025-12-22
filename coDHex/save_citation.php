@@ -2,26 +2,27 @@
 session_start();
 require 'db_connect.php';
 
-// 1. Controllo sicurezza: Utente loggato?
+// 1. Controllo sicurezza: Verifica se l'utente è loggato -> se 'user_id' non esiste nella sessione, blocchiamo tutto.
 if (!isset($_SESSION['user_id'])) {
-    http_response_code(401); // Non autorizzato
+    http_response_code(401); // Codice HTTP non autorizzato
     die("Errore: Devi effettuare il login.");
 }
 
+// 2. Verifica se il form è stato inviato (metodo POST)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
+    // Recupera l'ID dell'utente della sessione
     $uid = $_SESSION['user_id'];
-    // Recuperiamo il tipo (che invieremo via JS)
+    // Recupera il tipo di fonte
     $tipo = $_POST['sourceType'] ?? 'libro';
 
-    // Inizializziamo le variabili vuote
+    // 3. Inizializzazione delle variabili -> impostiamo tutto a null per evitare errori (del tipo "undefined variable")
     $nome = $cognome = $titolo = $data = $genere = $formato = null;
     $citta = $editore = $pagine = $edizione = $isbn = null;
     $titolo_rivista = $volume = $fascicolo = $issn = null;
     $titolo_sito = $url = null;
 
-    // --- LOGICA DI MAPPING ---
-    // In base al tipo, leggiamo i campi con il suffisso giusto (-b, -a, -w)
+    // LOGICA DI MAPPING
+    // In base al tipo, leggiamo i campi con il suffisso giusto (-b per book, -a per article, -w per web)
     
     if ($tipo === 'libro') {
         $nome = $_POST['authorfname-b'] ?? '';
@@ -59,14 +60,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $formato = $_POST['citazione-w'] ?? 'apa';
     }
 
-    // Se la data arriva vuota, la settiamo a NULL per non rompere il DB
+    // 4. Pulizia dei dati (Null Handling) -> se un campo numerico o data è vuoto, lo forziamo a NULL per non rompere il DB (darebbe errore cercando di inserire una stringa vuota in un numero);
     if (empty($data)) $data = null;
     if (empty($pagine)) $pagine = null;
     if (empty($volume)) $volume = null;
     if (empty($fascicolo)) $fascicolo = null;
     if (empty($edizione)) $edizione = null;
 
-    // --- QUERY DI INSERIMENTO ---
+    // QUERY DI INSERIMENTO
+    // Usiamo una sola tabella 'bibliografia' che contiene le colonne per TUTTI i tipi. Le colonne non usate per quel tipo resteranno NULL nel database.
     $sql = "INSERT INTO bibliografia 
             (utente_id, tipo, nome_autore, cognome_autore, titolo, data_pubblicazione, genere, formato_citazione,
              citta, editore, pagine, edizione, isbn,
@@ -78,6 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
              :titriv, :vol, :fasc, :issn,
              :titsito, :url)";
 
+    // 5. Preparazione ed esecuzione sicura -> usiamo i prepared statements per evitare SQL Injection
     try {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
@@ -89,7 +92,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         echo "Fonte salvata con successo!";
     } catch (PDOException $e) {
-        http_response_code(500);
+        // 6. Gestione errori database
+        http_response_code(500); // Errore interno del server
         echo "Errore Database: " . $e->getMessage();
     }
 }

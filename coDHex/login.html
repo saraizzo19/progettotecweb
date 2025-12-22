@@ -8,6 +8,7 @@
     <style>
 
         /* TEMPLATE DA CODEPEN GLASSMORPHISM LOGIN FORM MODIFICATO IN BASE ALLO STILE PREFERITO */
+        /* Importazione del font "Lexend" da Google Fonts */
         @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
 
         * {
@@ -619,21 +620,22 @@
 </div>
 
 <script>
+    // Attende che l'intero DOM (HTML) sia caricato prima di eseguire lo script
     document.addEventListener('DOMContentLoaded', () => {
         const form = document.getElementById('loginForm');
 
-        // Campi di input
+        // Selezione degli elementi di input
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
 
-        // Messaggi di errore
+        // Selezione degli elementi dove mostrare i messaggi di errore
         const emailError = document.getElementById('emailError');
         const passwordError = document.getElementById('passwordError');
 
-        // Toggle visibilità password
+        // Selezione del bottone "occhio" per la password
         const passwordToggle = document.getElementById('passwordToggle');
 
-        // Funzione per mostrare/nascondere l'errore
+        // Funzione per aggiungere/rimuobere la classe 'show' (= mostrare/nascondere l'errore=
         const showError = (errorElement, show) => {
             if (show) {
                 errorElement.classList.add('show');
@@ -648,12 +650,14 @@
             // Semplice regex per validazione email
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             const isValid = emailRegex.test(emailInput.value.trim());
-            // Aggiorniamo il messaggio di errore per essere più specifici
+            // Aggiorniamo il messaggio di errore per essere più specifici -> decide quale messaggio mostrare (vuoto o formato errato)
             emailError.textContent = emailInput.value.trim() === '' ? 'L\'e-mail è obbligatoria' : 'Indirizzo e-mail non valido';
+            // Mostra l'errore se NON è valido (!isValid)
             showError(emailError, !isValid);
             return isValid;
         };
 
+        // Controlla solo che la password non sia vuota
         const validatePassword = () => {
             const isValid = passwordInput.value.trim().length > 0;
             passwordError.textContent = 'La password è obbligatoria';
@@ -661,6 +665,7 @@
             return isValid;
         };
 
+        // Funzione centrale che richiama tutte le validazioni
         const validateForm = () => {
             const isEmailValid = validateEmail();
             const isPasswordValid = validatePassword();
@@ -672,9 +677,11 @@
         const setupPasswordToggle = (toggleButton, inputField) => {
             toggleButton.addEventListener('click', () => {
                 const eyeIcon = toggleButton.querySelector('.eye-icon');
+                // Controlla il tipo attuale: se è 'password' diventa 'text' e viceversa
                 const type = inputField.getAttribute('type') === 'password' ? 'text' : 'password';
                 inputField.setAttribute('type', type);
 
+                // Aggiroan l'icona dell'occhio
                 if (type === 'text') {
                     eyeIcon.classList.add('show-password');
                 } else {
@@ -687,25 +694,27 @@
 
         // --- EVENT LISTENERS ---
 
+        // Rimuove il messaggio di errore non appena l'utente inizia a scrivere ('input')
         emailInput.addEventListener('input', () => showError(emailError, false));
         passwordInput.addEventListener('input', () => showError(passwordError, false));
 
+        // Esegue la validazione quando l'utente esce dal campo ('blur')
         emailInput.addEventListener('blur', validateEmail);
         passwordInput.addEventListener('blur', validatePassword);
 
         // --- GESTIONE INVIO FORM (MODIFICATA CON PHP) ---
         form.addEventListener('submit', (e) => {
-            e.preventDefault();
+            e.preventDefault(); // e.preventDefault() impedisce al browser di ricaricare la pagina (comportamento standard del form)
             const isFormValid = validateForm();
 
             if (isFormValid) {
                 console.log('Form valido, invio reale al server...');
 
-                // Attiva l'animazione di caricamento sul bottone
+                // Attiva l'animazione di caricamento sul bottone (spinner di caricamento)
                 const submitBtn = form.querySelector('.login-btn');
                 submitBtn.classList.add('loading');
 
-                // 1. Raccogliamo i dati del form
+                // 1. Raccogliamo i dati del form in un oggetto FormData pronto per l'invio
                 const formData = new FormData(form);
 
                 // 2. Inviamo i dati a login.php tramite FETCH
@@ -713,55 +722,52 @@
                     method: 'POST',
                     body: formData
                 })
-                    .then(response => response.text()) // Leggiamo la risposta del server
+                    .then(response => response.text()) // Converte la risposta grezza in testo
                     .then(data => {
 
-                        // 3. Controlliamo cosa ha risposto il server
+                        // 3. Analisi della risposta del server (Back-end)
                         if (data.includes("Errore")) {
-                            // --- CASO ERRORE ---
+                            // --- CASO ERRORE (Login fallito) ---
                             submitBtn.classList.remove('loading'); // Ferma il caricamento
 
-                            // Puliamo il messaggio da eventuali tag HTML e mostriamo l'alert
+                            // Rimuove eventuali tag HTML dalla risposta per mostrare un alert pulito
                             let messaggioPulito = data.replace(/<[^>]*>?/gm, '');
                             alert(messaggioPulito);
                         }
                         else {
-                            // --- CASO SUCCESSO ---
-                            // Qui manteniamo la tua bella animazione!
+                            // --- CASO SUCCESSO (Login riuscito) ---
 
-                            // Nascondi form e link registrazione
+                            // Nascondi form per il mostrare il messaggio di successo
                             form.style.display = 'none';
                             const signupLink = document.querySelector('.signup-link');
                             if(signupLink) signupLink.style.display = 'none';
 
-                            // Mostra messaggio successo (spunta verde)
+                            // Mostra la spunta verde
                             const successMessage = document.getElementById('successMessage');
                             successMessage.classList.add('show');
 
                             console.log('Login completato! Reindirizzamento...');
 
-                            // Aspettiamo 1.5 secondi per far vedere la spunta verde, poi cambiamo pagina
+                            // Timer di 1.5 secondi per mostrare l'animazione prima di cambiare pagina
                             setTimeout(() => {
                                 window.location.href = 'pagina_riservata.php';
                             }, 1500);
                         }
                     })
                     .catch(error => {
-                        // Caso errore di rete (server spento, no internet)
+                        // Gestione errori di rete (es. server offline, no internet, file PHP non trovato ecc.)
                         submitBtn.classList.remove('loading');
                         console.error('Errore:', error);
-                        // NOTA PER L'UTENTE:
-                        // Se apri solo il file HTML senza un server (es. XAMPP/MAMP), entrerai sempre qui
-                        // perché il file 'login.php' non può essere trovato.
                         alert("Impossibile connettersi al server. Verifica che XAMPP sia acceso e login.php esista.");
                     });
 
             } else {
+                // Se il form non è valido, non inviamo nulla e facciamo "tremare" (shake) la card
                 console.log('Form non valido, controlla i campi.');
                 const card = document.querySelector('.login-card');
                 card.style.animation = 'shake 0.5s ease-in-out';
                 setTimeout(() => {
-                    card.style.animation = '';
+                    card.style.animation = ''; // Reset animazione
                 }, 500);
             }
         });
